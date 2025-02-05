@@ -20,7 +20,15 @@ import {
 import { useToast } from '@/hooks/use-toast';
 import { updateUser } from '@/lib/actions/user.action';
 import { USER_ROLES } from '@/lib/constants';
-import { updateUserSchema } from '@/lib/validators';
+
+
+const updateUserSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  email: z.string().email(),
+  role: z.string(),
+});
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { ControllerRenderProps, useForm } from 'react-hook-form';

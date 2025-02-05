@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "../assets/styles/globals.css";
 import "../lib/constants/index";
-import { APP_NAME, APP_DESCRIPTION, SERVER_URL } from "../lib/constants/index";
+import { APP_DESCRIPTION, SERVER_URL } from "../lib/constants/index";
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
 
