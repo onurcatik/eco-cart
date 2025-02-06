@@ -7,18 +7,18 @@ export async function POST(req: Request) {
   try {
     const { email } = await req.json();
 
-    console.log("📩 Şifre sıfırlama isteği alındı:", email);
+    console.log("📩 Password reset request received:", email);
 
     const user = await prisma.user.findUnique({
       where: { email },
     });
 
     if (!user) {
-      return NextResponse.json({ message: 'E-posta adresi bulunamadı' }, { status: 400 });
+      return NextResponse.json({ message: 'Email address not found' }, { status: 400 });
     }
 
     const resetToken = randomBytes(32).toString('hex');
-    const resetTokenExpires = new Date(Date.now() + 3600000); // 1 saat geçerli
+    const resetTokenExpires = new Date(Date.now() + 3600000); // Valid for 1 hour
 
     await prisma.user.update({
       where: { email },
@@ -30,17 +30,17 @@ export async function POST(req: Request) {
 
     const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${resetToken}`;
 
-    console.log("🔗 Şifre sıfırlama bağlantısı:", resetUrl);
+    console.log("🔗 Password reset link:", resetUrl);
 
     await sendEmail({
       to: email,
-      subject: 'Şifre Sıfırlama Talebi',
-      text: `Şifrenizi sıfırlamak için aşağıdaki bağlantıya tıklayın:\n\n${resetUrl}`,
+      subject: 'Password Reset Request',
+      text: `Click the following link to reset your password:\n\n${resetUrl}`,
     });
 
-    return NextResponse.json({ message: 'Şifre sıfırlama bağlantısı gönderildi' });
+    return NextResponse.json({ message: 'Password reset link sent' });
   } catch (error) {
-    console.error("❌ Hata oluştu:", error);
-    return NextResponse.json({ message: 'Sunucu hatası' }, { status: 500 });
+    console.error("❌ An error occurred:", error);
+    return NextResponse.json({ message: 'Server error' }, { status: 500 });
   }
 }

@@ -393,7 +393,7 @@ export async function signInWithCredentials(
       where: { email: user.email },
     });
 
-    console.log("🔍 Kullanıcı bulundu:", existingUser);
+    console.log("🔍 User found:", existingUser);
 
     if (!existingUser) {
       return { success: false, message: 'Invalid email or password' };
@@ -401,21 +401,21 @@ export async function signInWithCredentials(
 
     // **HESAP DOĞRULAMASI KONTROLÜ**
     if (!existingUser.isVerified) {
-      console.log("⛔ Kullanıcı doğrulanmamış, giriş reddedildi.");
+      console.log("⛔ User not verified, login denied.");
       return {
         success: false,
-        message: 'Hesabınızı doğrulamanız gerekiyor. Lütfen e-postanızı kontrol edin.',
+        message: 'You need to verify your account. Please check your email.',
       };
     }
 
-    console.log("✅ Kullanıcı doğrulandı, giriş yapılıyor...");
+    console.log("✅ User verified, logging in...");
 
     // Kullanıcı doğrulanmışsa giriş yap
     await signIn('credentials', user);
 
     return { success: true, message: 'Signed in successfully' };
   } catch (error) {
-    console.error("❌ Giriş hatası:", error);
+    console.error("❌ Input error", error);
 
     if (isRedirectError(error)) {
       throw error;
@@ -448,7 +448,7 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
     if (existingUser) {
       return {
         success: false,
-        message: 'Bu e-posta zaten kayıtlı. Lütfen farklı bir e-posta kullanın.',
+        message: 'This e-mail is already registered. Please use a different e-mail.',
       };
     }
 
@@ -469,16 +469,16 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
     // Aktivasyon bağlantısı oluştur
     const verificationUrl = `${process.env.NEXTAUTH_URL}/verify-email?token=${verificationToken}`;
 
-    console.log("📩 Aktivasyon bağlantısı:", verificationUrl);
+    console.log("📩 Activation link:", verificationUrl);
 
     // Kullanıcıya e-posta gönder
     await sendEmail({
       to: user.email,
-      subject: 'Hesabınızı Doğrulayın',
-      text: `Merhaba ${user.name},\n\nHesabınızı doğrulamak için aşağıdaki bağlantıya tıklayın:\n\n${verificationUrl}`,
+      subject: 'Activation link:',
+      text: `Hello ${user.name},\n\nClick on the following link to verify your account:\n\n${verificationUrl}`,
     });
 
-    return { success: true, message: 'Kayıt başarılı! Lütfen e-postanızı doğrulayın.' };
+    return { success: true, message: 'Registration successful! Please verify your e-mail.' };
   } catch (error) {
     if (isRedirectError(error)) {
       throw error;
@@ -633,7 +633,7 @@ export async function updateProfile(user: {
 
     return {
       success: true,
-      message: "Kullanıcı bilgileri başarıyla güncellendi",
+      message: "User information has been successfully updated",
     };
   } catch (error) {
     return { success: false, message: formatError(error) };

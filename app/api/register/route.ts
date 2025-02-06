@@ -6,50 +6,50 @@ import { randomBytes } from 'crypto';
 
 export async function POST(req: Request) {
   try {
-    const { name, email, password} = await req.json();
+    const { name, email, password } = await req.json();
 
-    console.log("📝 Yeni kayıt isteği:", email);
+    console.log("📝 New registration request:", email);
 
-    // Kullanıcının olup olmadığını kontrol et
+    // Check if the user already exists
     const existingUser = await prisma.user.findUnique({ where: { email } });
 
     if (existingUser) {
-      return NextResponse.json({ message: 'Bu e-posta zaten kayıtlı.' }, { status: 400 });
+      return NextResponse.json({ message: 'This email is already registered.' }, { status: 400 });
     }
 
-    // Şifreyi hashle
+    // Hash the password
     const hashedPassword = hashSync(password, 10);
 
-    // Aktivasyon için rastgele token oluştur
+    // Create a random token for verification
     const verificationToken = randomBytes(32).toString('hex');
 
-    // Yeni kullanıcıyı kaydet
+    // Save the new user
     await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
         verificationToken,
-        isVerified: false, // Kullanıcıyı doğrulanmamış olarak kaydet
+        isVerified: false, // Save user as unverified
       },
     });
 
-    // Aktivasyon bağlantısı oluştur
+    // Create the verification link
     const verificationUrl = `${process.env.NEXTAUTH_URL}/verify-email?token=${verificationToken}`;
 
-    console.log("📩 Aktivasyon bağlantısı:", verificationUrl);
+    console.log("📩 Verification link:", verificationUrl);
 
-    // Kullanıcıya e-posta gönder
+    // Send an email to the user
     await sendEmail({
       to: email,
-      subject: 'Hesabınızı Doğrulayın',
-      text: `Merhaba ${name},\n\nHesabınızı doğrulamak için aşağıdaki bağlantıya tıklayın:\n\n${verificationUrl}`,
+      subject: 'Verify Your Account',
+      text: `Hello ${name},\n\nPlease click the following link to verify your account:\n\n${verificationUrl}`,
     });
 
-    return NextResponse.json({ message: 'Kayıt başarılı! Lütfen e-postanızı doğrulayın.' });
+    return NextResponse.json({ message: 'Registration successful! Please verify your email.' });
 
   } catch (error) {
-    console.error("❌ Kayıt hatası:", error);
-    return NextResponse.json({ message: 'Sunucu hatası' }, { status: 500 });
+    console.error("❌ Registration error:", error);
+    return NextResponse.json({ message: 'Server error' }, { status: 500 });
   }
 }

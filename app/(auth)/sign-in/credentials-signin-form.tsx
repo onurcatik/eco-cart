@@ -375,7 +375,7 @@ const CredentialsSignInForm = () => {
       setResetMessage(result.message);
     } catch (error) {
       console.error('Şifre sıfırlama hatası:', error); // Logs the error
-      setResetMessage('Bir hata oluştu, lütfen tekrar deneyin.');
+      setResetMessage('An error occurred, please try again.');
     }
   };
 
@@ -490,13 +490,13 @@ const CredentialsSignInForm = () => {
 
           {data && !data.success && (
             <div className='text-center text-red-500'>
-              {data.message === 'Hesabınızı doğrulamanız gerekiyor. Lütfen e-postanızı kontrol edin.' ? (
+              {data.message === 'You need to verify your account. Please check your email.' ? (
                 <>
                   {data.message}  
                   <p className="text-sm text-gray-600">
-                    Eğer doğrulama e-postasını almadıysanız, tekrar talep etmek için{' '}
+                  If you did not receive the verification email, you can request it again{' '}
                     <Link href='/resend-verification' className='text-blue-500 hover:underline'>
-                      buraya tıklayın
+                    click here
                     </Link>.
                   </p>
                 </>

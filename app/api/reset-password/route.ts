@@ -5,17 +5,17 @@ import { NextResponse } from 'next/server';
 export async function POST(req: Request) {
   const { token, password } = await req.json();
 
-  console.log("🔍 Gelen şifre sıfırlama isteği. Token:", token);
+  console.log("🔍 Received password reset request. Token:", token);
 
   const user = await prisma.user.findFirst({
     where: {
       passwordResetToken: token,
-      passwordResetExpires: { gt: new Date() }, // Token süresi dolmamış olmalı
+      passwordResetExpires: { gt: new Date() }, // Token must not be expired
     },
   });
 
   if (!user) {
-    return NextResponse.json({ message: 'Geçersiz veya süresi dolmuş token' }, { status: 400 });
+    return NextResponse.json({ message: 'Invalid or expired token' }, { status: 400 });
   }
 
   const hashedPassword = hashSync(password, 10);
@@ -29,5 +29,5 @@ export async function POST(req: Request) {
     },
   });
 
-  return NextResponse.json({ message: 'Şifre başarıyla güncellendi' });
+  return NextResponse.json({ message: 'Password updated successfully' });
 }

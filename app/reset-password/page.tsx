@@ -101,7 +101,7 @@ import { useSearchParams, useRouter } from "next/navigation";
 
 export default function ResetPassword() {
   const searchParams = useSearchParams();
-  const router = useRouter(); // ✅ useRouter kullanımı
+  const router = useRouter(); // ✅ Using useRouter
   const token = searchParams.get("token");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
@@ -118,24 +118,24 @@ export default function ResetPassword() {
     const data = await res.json();
     setMessage(data.message);
 
-    // ✅ Başarılı şifre sıfırlama durumunda yönlendirme
+    // ✅ Redirect upon successful password reset
     if (res.ok) {
       setTimeout(() => {
-        router.push("/"); // Home sayfasına yönlendir
-      }, 2000); // 2 saniye sonra yönlendirme
+        router.push("/"); // Redirect to home page
+      }, 2000); // Redirect after 2 seconds
     }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-semibold text-center mb-6">Şifre Sıfırla</h2>
+        <h2 className="text-2xl font-semibold text-center mb-6">Reset Password</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-gray-700">Yeni Şifre</label>
+            <label className="block text-gray-700">New Password</label>
             <input
               type="password"
-              placeholder="Yeni Şifre"
+              placeholder="New Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -146,7 +146,7 @@ export default function ResetPassword() {
             type="submit"
             className="w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition duration-200"
           >
-            Şifreyi Güncelle
+            Update Password
           </button>
         </form>
         {message && (

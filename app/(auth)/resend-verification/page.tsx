@@ -71,7 +71,7 @@ const ResendVerificationPage = () => {
 
   const handleResendVerification = async () => {
     if (!email) {
-      setMessage('Lütfen e-posta adresinizi girin.');
+      setMessage('Please enter your email address.');
       return;
     }
 
@@ -85,28 +85,28 @@ const ResendVerificationPage = () => {
       const result = await response.json();
       setMessage(result.message);
     } catch (error) {
-      console.error('Doğrulama hatası:', error);
-      setMessage('Bir hata oluştu, lütfen tekrar deneyin.');
+      console.error('Verification error:', error);
+      setMessage('An error occurred, please try again.');
     }
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen ">
       <div className="bg-white p-6 rounded-lg shadow-md w-96">
-        <h2 className="text-xl font-bold mb-4">E-posta Doğrulamasını Yeniden Gönder</h2>
+        <h2 className="text-xl font-bold mb-4">Resend Email Verification</h2>
         
-        <Label htmlFor="email">E-posta Adresiniz</Label>
+        <Label htmlFor="email">Your Email Address</Label>
         <Input
           id="email"
           type="email"
-          placeholder="E-posta adresinizi girin"
+          placeholder="Enter your email address"
           className="border border-gray-300 rounded-md py-2 px-3 mt-3 w-full"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         
         <Button onClick={handleResendVerification} className="mt-4 w-full bg-red-500 text-white py-2 rounded-md">
-          Doğrulama E-postasını Gönder
+          Send Verification Email
         </Button>
 
         {message && <p className="text-red-500 mt-3">{message}</p>}
