@@ -47,6 +47,8 @@ model User {
   session       Session[]
   passwordResetToken  String?  // ✅ Şifre sıfırlama için token
   passwordResetExpires DateTime? // ✅ Token geçerlilik süresi
+  isVerified         Boolean  @default(false)  // ✅ Kullanıcının e-postası doğrulanmış mı?
+  verificationToken  String?  // ✅ Kullanıcı onay token'i
 }
 
 model Account {
