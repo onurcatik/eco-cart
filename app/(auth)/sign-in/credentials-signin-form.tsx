@@ -493,12 +493,12 @@ const CredentialsSignInForm = () => {
               {data.message === 'Hesabınızı doğrulamanız gerekiyor. Lütfen e-postanızı kontrol edin.' ? (
                 <>
                   {data.message}  
-                  {/* <p className="text-sm text-gray-600">
+                  <p className="text-sm text-gray-600">
                     Eğer doğrulama e-postasını almadıysanız, tekrar talep etmek için{' '}
                     <Link href='/resend-verification' className='text-blue-500 hover:underline'>
                       buraya tıklayın
                     </Link>.
-                  </p> */}
+                  </p>
                 </>
               ) : (
                 data.message

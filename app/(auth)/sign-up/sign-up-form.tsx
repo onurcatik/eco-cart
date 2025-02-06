@@ -488,7 +488,7 @@ import Image from 'next/image';
 const SignUpForm = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/';
+  const callbackUrl = searchParams.get('/sign-in');
 
 
   const [message, setMessage] = useState('');
@@ -502,7 +502,7 @@ const SignUpForm = () => {
     if (data && data.success) {
       setMessage('Kayıt başarılı! Lütfen e-postanızı kontrol edip hesabınızı onaylayın.');
       setTimeout(() => {
-        router.push(callbackUrl);
+        router.push("/sign-in");
       }, 3000);
     }
   }, [data, router, callbackUrl]);
@@ -554,7 +554,7 @@ const SignUpForm = () => {
         <h1 className='text-3xl font-semibold mb-0 relative bottom-16 left-[115px]'>Register</h1>
         
         <form action={action}>
-          <input type='hidden' name='callbackUrl' value={callbackUrl} />
+          <input type='hidden' name='callbackUrl' />
           
           {/* Full Name Field */}
           <div className='mb-4'>
