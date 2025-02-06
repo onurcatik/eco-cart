@@ -45,6 +45,8 @@ model User {
   Review        Review[]
   OrderItem     OrderItem[]
   session       Session[]
+  passwordResetToken  String?  // ✅ Şifre sıfırlama için token
+  passwordResetExpires DateTime? // ✅ Token geçerlilik süresi
 }
 
 model Account {

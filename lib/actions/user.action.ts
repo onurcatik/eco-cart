@@ -60,7 +60,10 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
     });
 
     if (existingUser) {
-      return { success: false, message: 'Email already exists. Please use a different email.' };
+      return {
+        success: false,
+        message: 'Email already exists. Please use a different email.',
+      };
     }
 
     // Kullanıcıyı oluşturuyoruz
@@ -72,11 +75,12 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
       },
     });
 
-    // Otomatik oturum açma: redirect: false ekliyoruz
+    // Otomatik oturum açma
     const signInResult: { error?: string } = await signIn('credentials', {
       email: user.email,
       password: plainPassword,
-      redirect: true, // Yönlendirme yapmaması için bu seçeneği ekleyin
+      redirect: true,
+      router: true,
     });
 
     // Eğer signIn işleminde bir hata varsa bunu kontrol edebilirsiniz
@@ -86,6 +90,12 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
 
     return { success: true, message: 'User registered successfully' };
   } catch (error) {
+    // Yönlendirme hatalarını kontrol ediyoruz
+    if (isRedirectError(error)) {
+      throw error;
+    }
+
+    // Zod validasyon hatası
     if (error instanceof z.ZodError) {
       return {
         success: false,
@@ -93,6 +103,7 @@ export async function signUpUser(prevState: unknown, formData: FormData) {
       };
     }
 
+    // Diğer beklenmeyen hatalar
     // return { success: false, message: 'Internal server error' };
   }
 }
